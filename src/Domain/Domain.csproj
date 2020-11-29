@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>ArcadiaStats.Domain</RootNamespace>
+    <AssemblyName>ArcadiaStats.Domain</AssemblyName>
+  </PropertyGroup>
+
+</Project>
