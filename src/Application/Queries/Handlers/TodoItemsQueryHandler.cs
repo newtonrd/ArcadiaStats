@@ -1,10 +1,13 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ArcadiaStats.Application.Common.Interfaces;
+using ArcadiaStats.Application.Common.Mappings;
 using ArcadiaStats.Application.Common.Models;
 using ArcadiaStats.Application.Queries.TodoItems.GetTodoItemsWithPagination;
 using ArcadiaStats.Application.Queries.TodoLists.GetTodos;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 
 namespace Application.Queries.Handlers
