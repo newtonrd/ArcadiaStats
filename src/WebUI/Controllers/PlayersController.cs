@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ArcadiaStats.Application.PlayerCharacters.Commands.CreatePlayer;
 using ArcadiaStats.Application.Queries.Players.GetPlayers;
@@ -8,7 +9,7 @@ namespace ArcadiaStats.WebUI.Controllers
     public class PlayersController : ApiControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<PlayerVm>> GetAll()
+        public async Task<ActionResult<List<PlayerVm>>> GetAll()
         {
             return await Mediator.Send(new GetPlayersQuery());
         }

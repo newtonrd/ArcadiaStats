@@ -18,7 +18,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PlayerVm"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlayerVm"
+                  }
                 }
               }
             }
@@ -493,7 +496,17 @@
     "schemas": {
       "PlayerVm": {
         "type": "object",
-        "additionalProperties": false
+        "additionalProperties": false,
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
       },
       "CreatePlayerCommand": {
         "type": "object",

@@ -15,7 +15,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IPlayersClient {
-    getAll(): Observable<PlayerVm>;
+    getAll(): Observable<PlayerVm[]>;
     create(command: CreatePlayerCommand): Observable<number>;
 }
 
@@ -32,7 +32,7 @@ export class PlayersClient implements IPlayersClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getAll(): Observable<PlayerVm> {
+    getAll(): Observable<PlayerVm[]> {
         let url_ = this.baseUrl + "/api/Players";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -51,14 +51,14 @@ export class PlayersClient implements IPlayersClient {
                 try {
                     return this.processGetAll(<any>response_);
                 } catch (e) {
-                    return <Observable<PlayerVm>><any>_observableThrow(e);
+                    return <Observable<PlayerVm[]>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<PlayerVm>><any>_observableThrow(response_);
+                return <Observable<PlayerVm[]>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetAll(response: HttpResponseBase): Observable<PlayerVm> {
+    protected processGetAll(response: HttpResponseBase): Observable<PlayerVm[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -69,7 +69,11 @@ export class PlayersClient implements IPlayersClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = PlayerVm.fromJS(resultData200);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(PlayerVm.fromJS(item));
+            }
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -77,7 +81,7 @@ export class PlayersClient implements IPlayersClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<PlayerVm>(<any>null);
+        return _observableOf<PlayerVm[]>(<any>null);
     }
 
     create(command: CreatePlayerCommand): Observable<number> {
@@ -767,6 +771,8 @@ export class WeatherForecastClient implements IWeatherForecastClient {
 }
 
 export class PlayerVm implements IPlayerVm {
+    firstName?: string | undefined;
+    lastName?: string | undefined;
 
     constructor(data?: IPlayerVm) {
         if (data) {
@@ -778,6 +784,10 @@ export class PlayerVm implements IPlayerVm {
     }
 
     init(_data?: any) {
+        if (_data) {
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+        }
     }
 
     static fromJS(data: any): PlayerVm {
@@ -789,11 +799,15 @@ export class PlayerVm implements IPlayerVm {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
         return data; 
     }
 }
 
 export interface IPlayerVm {
+    firstName?: string | undefined;
+    lastName?: string | undefined;
 }
 
 export class CreatePlayerCommand implements ICreatePlayerCommand {

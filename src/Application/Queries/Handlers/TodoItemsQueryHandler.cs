@@ -30,7 +30,7 @@ namespace Application.Queries.Handlers
                 .Where(x => x.ListId == request.ListId)
                 .OrderBy(x => x.Title)
                 .ProjectTo<TodoItemDto>(_mapper.ConfigurationProvider)
-                .PaginatedListAsync(request.PageNumber, request.PageSize); ;
+                .PaginatedListAsync(request.PageNumber, request.PageSize);
         }
     }
 }
