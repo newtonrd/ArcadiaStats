@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  nginx:
+    build:
+      context: ../nginx/
+    container_name: arcadiastats.local
+    volumes:
+      - ../.docker/https/localhost.crt:/etc/ssl/certs/localhost.crt:ro
+      - ../.docker/https/localhost.key:/etc/ssl/private/localhost.key:ro
+    links:
+      - arcadia-stats-api
+      - arcadia-stats-spa
+  arcadia-stats-api:
+    image: ${DOCKER_REGISTRY-}arcadia-stats-api
+    container_name: "arcadia-stats-api"
+    build:
+      context: ../src/
+      dockerfile: WebUI/Dockerfile
+      args:
+        - skip_client_build=true
+    depends_on: 
+      - arcadia-stats-spa
+    volumes:
+      - ../.docker/https:/https:ro
+  arcadia-stats-spa:
+    image: ${DOCKER_REGISTRY-}arcadia-stats-spa
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    container_name: "arcadia-stats-spa"
+    build:
+      context: ../src/WebUI/ClientApp
+    volumes:
+      - ../src/WebUI/ClientApp:/app
