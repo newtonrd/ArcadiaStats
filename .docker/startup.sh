@@ -1,3 +1,12 @@
+#!/bin/bash
+if [ `ls -1 https/localhost.* 2>/dev/null | wc -l ` -gt 0 ];
+then
+    echo "0. Using certificates from $(tput setaf 3)https$(tput sgr0) folder."
+else
+    echo "ERROR: Failed to find certificates. Check the specific makecert script for your OS."
+    exit 1
+fi
+
 echo "1. Building Docker images. This may take few minutes..."
 echo -e "\n\n\tEnsure Docker is up and running.\n\n"
 docker-compose build

@@ -1,16 +1,6 @@
 version: "3.8"
 
 services:
-  nginx:
-    build:
-      context: ../nginx/
-    container_name: arcadiastats.local
-    volumes:
-      - ../.docker/https/localhost.crt:/etc/ssl/certs/localhost.crt:ro
-      - ../.docker/https/localhost.key:/etc/ssl/private/localhost.key:ro
-    links:
-      - arcadia-stats-api
-      - arcadia-stats-spa
   arcadia-stats-api:
     image: ${DOCKER_REGISTRY-}arcadia-stats-api
     container_name: "arcadia-stats-api"

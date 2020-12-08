@@ -1,14 +1,14 @@
 version: "3.8"
 
 services:
-  nginx:
-    ports:
-      - "8080:80"
-      - "8081:443"
   arcadia-stats-api:
+    ports:
+      - "4"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
   arcadia-stats-spa:
+    ports:
+      - "4200:4200"
     build:
       args:
         ENV: docker
