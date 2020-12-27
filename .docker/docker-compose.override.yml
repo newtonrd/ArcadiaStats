@@ -2,13 +2,20 @@ version: "3.8"
 
 services:
   arcadia-stats-api:
-    ports:
-      - "4"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - "SpaBaseUrl=http://localhost:4200"
+      - "UseInMemoryDatabase=true"
   arcadia-stats-spa:
+    image: ${DOCKER_REGISTRY-}arcadia-stats-spa
+    container_name: "arcadia-stats-spa"
+    build:
+      context: ../src/WebUI/ClientApp
+      dockerfile: Dockerfile
+    depends_on: 
+      - arcadia-stats-api
     ports:
       - "4200:4200"
-    build:
-      args:
-        ENV: docker
+  db:
+    ports:
+      - "1433:1433"
